@@ -21,7 +21,6 @@ public class SuccessOrderTest {
     private static final String START_PAGE = "https://qa-scooter.praktikum-services.ru/";
     private static final String EXPECTED_MODAL_HELPER_TEXT = "Заказ оформлен";
 
-
     private final WebDriverManager webDriverManager;
     private MainPageObject mainPageObject;
     private FirstOrderPageObject firstOrderPageObject;
@@ -29,6 +28,7 @@ public class SuccessOrderTest {
 
     private final UserData userData;
     private final OrderData orderData;
+
 
     public SuccessOrderTest(WebDriverManager webDriverManager, UserData userData, OrderData orderData) {
         this.webDriverManager = webDriverManager;
