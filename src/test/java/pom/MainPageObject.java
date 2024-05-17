@@ -1,9 +1,12 @@
-package pageobject;
+package pom;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class MainPageObject {
+
+    private static final String QUESTION_BY_TEXT_XPATH = ".//div[text()='%s']";
+    private static final String ANSWER_RELATIVE_TO_QUESTION_XPATH = "./../following-sibling::div";
 
     private final WebDriver webDriver;
 
@@ -22,23 +25,37 @@ public class MainPageObject {
         this.webDriver = webDriver;
     }
 
-    public void clickAcceptCookieButton() {
+    public MainPageObject clickAcceptCookieButton() {
         webDriver.findElement(acceptCookieButton).click();
+        return this;
     }
 
-    public void clickFirstAccordionHeading() {
-        webDriver.findElement(firstAccordionHeading).click();
+    public MainPageObject clickQuestionByText(String question) {
+        webDriver.findElement(By.xpath(String.format(QUESTION_BY_TEXT_XPATH, question))).click();
+        return this;
+    }
+
+    public boolean checkAnswerIsShown(String question) {
+        return webDriver.findElement(By.xpath(String.format(QUESTION_BY_TEXT_XPATH, question)))
+                .findElement(By.xpath(ANSWER_RELATIVE_TO_QUESTION_XPATH)).isDisplayed();
+    }
+
+    public String getAnswerTextByQuestion(String question) {
+        return webDriver.findElement(By.xpath(String.format(QUESTION_BY_TEXT_XPATH, question)))
+                .findElement(By.xpath(ANSWER_RELATIVE_TO_QUESTION_XPATH)).getText();
     }
 
     public boolean isFirstAccordionPanelShown() {
         return webDriver.findElement(firstAccordionPanel).isDisplayed();
     }
 
-    public void clickHeaderOrderButton() {
+    public MainPageObject clickHeaderOrderButton() {
         webDriver.findElement(headerOrderButton).click();
+        return this;
     }
 
-    public void clickMainPageOrderButton() {
+    public MainPageObject clickMainPageOrderButton() {
         webDriver.findElement(mainPageOrderButton).click();
+        return this;
     }
 }

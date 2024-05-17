@@ -1,4 +1,4 @@
-package pageobject;
+package pom;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -25,31 +25,35 @@ public class FirstOrderPageObject {
         this.webDriver = webDriver;
     }
 
-    public void clickNextButton() {
+    public FirstOrderPageObject clickNextButton() {
         webDriver.findElement(nextButton).click();
+        return this;
     }
 
-    public void fillOrderForm(String name, String secondName, String address, String metroStation, String phoneNumber) {
-        fillName(name);
-        fillSecondName(secondName);
-        fillAddress(address);
-        fillAndSelectMetroStation(metroStation, 0);
-        fillPhoneNumber(phoneNumber);
+    public FirstOrderPageObject fillOrderForm(String name, String secondName, String address, String metroStation, String phoneNumber) {
+        return fillName(name)
+                .fillSecondName(secondName)
+                .fillAddress(address)
+                .fillAndSelectMetroStation(metroStation, 0)
+                .fillPhoneNumber(phoneNumber);
     }
 
-    public void fillName(String name) {
+    public FirstOrderPageObject fillName(String name) {
         webDriver.findElement(nameInput).sendKeys(name);
+        return this;
     }
 
-    public void fillSecondName(String secondName) {
+    public FirstOrderPageObject fillSecondName(String secondName) {
         webDriver.findElement(secondNameInput).sendKeys(secondName);
+        return this;
     }
 
-    public void fillAddress(String address) {
+    public FirstOrderPageObject fillAddress(String address) {
         webDriver.findElement(addressInput).sendKeys(address);
+        return this;
     }
 
-    public void fillAndSelectMetroStation(String metroStation, int option) {
+    public FirstOrderPageObject fillAndSelectMetroStation(String metroStation, int option) {
         webDriver.findElement(metroStationInput).sendKeys(metroStation);
         webDriver.findElement(
                         By.xpath(
@@ -57,9 +61,11 @@ public class FirstOrderPageObject {
                         )
                 )
                 .click();
+        return this;
     }
 
-    public void fillPhoneNumber(String phoneNumber) {
+    public FirstOrderPageObject fillPhoneNumber(String phoneNumber) {
         webDriver.findElement(phoneNumberInput).sendKeys(phoneNumber);
+        return this;
     }
 }

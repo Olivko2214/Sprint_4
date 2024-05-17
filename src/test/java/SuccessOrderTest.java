@@ -1,27 +1,22 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
 import model.OrderData;
 import model.RentalPeriod;
 import model.UserData;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import pageobject.FirstOrderPageObject;
-import pageobject.MainPageObject;
-import pageobject.SecondOrderPageObject;
+import pom.FirstOrderPageObject;
+import pom.MainPageObject;
+import pom.SecondOrderPageObject;
 
 import java.time.LocalDate;
 
 @RunWith(Parameterized.class)
-public class SuccessOrderTest {
+public class SuccessOrderTest extends CommonTest {
 
-    private static final String START_PAGE = "https://qa-scooter.praktikum-services.ru/";
     private static final String EXPECTED_MODAL_HELPER_TEXT = "Заказ оформлен";
 
-    private final WebDriverManager webDriverManager;
     private MainPageObject mainPageObject;
     private FirstOrderPageObject firstOrderPageObject;
     private SecondOrderPageObject secondOrderPageObject;
@@ -30,32 +25,22 @@ public class SuccessOrderTest {
     private final OrderData orderData;
 
 
-    public SuccessOrderTest(WebDriverManager webDriverManager, UserData userData, OrderData orderData) {
-        this.webDriverManager = webDriverManager;
+    public SuccessOrderTest(UserData userData, OrderData orderData) {
         this.userData = userData;
         this.orderData = orderData;
     }
 
     @Before
     public void setup() {
-        WebDriver driver = webDriverManager.create();
-        driver.get(START_PAGE);
-        mainPageObject = new MainPageObject(driver);
-        firstOrderPageObject = new FirstOrderPageObject(driver);
-        secondOrderPageObject = new SecondOrderPageObject(driver);
+        mainPageObject = new MainPageObject(getDriver());
+        firstOrderPageObject = new FirstOrderPageObject(getDriver());
+        secondOrderPageObject = new SecondOrderPageObject(getDriver());
     }
 
     @Parameterized.Parameters
     public static Object[][] getParameters() {
-        WebDriverManager chromedriverManager = WebDriverManager.chromedriver();
-        chromedriverManager.setup();
-
-        WebDriverManager firefoxdriverManager = WebDriverManager.firefoxdriver();
-        firefoxdriverManager.setup();
-
         return new Object[][]{
                 {
-                        chromedriverManager,
                         new UserData(
                                 "Ольга",
                                 "Ивкова",
@@ -69,7 +54,6 @@ public class SuccessOrderTest {
                         )
                 },
                 {
-                        firefoxdriverManager,
                         new UserData(
                                 "Иван",
                                 "Иванов",
@@ -87,22 +71,22 @@ public class SuccessOrderTest {
 
     @Test
     public void successOrderFromHeaderButtonTest() {
-        mainPageObject.clickAcceptCookieButton();
-        mainPageObject.clickHeaderOrderButton();
+        mainPageObject.clickAcceptCookieButton()
+                .clickHeaderOrderButton();
         firstOrderPageObject.fillOrderForm(
-                userData.getName(),
-                userData.getSecondName(),
-                userData.getAddress(),
-                userData.getMetroStation(),
-                userData.getPhoneNumber()
-        );
-        firstOrderPageObject.clickNextButton();
+                        userData.getName(),
+                        userData.getSecondName(),
+                        userData.getAddress(),
+                        userData.getMetroStation(),
+                        userData.getPhoneNumber()
+                )
+                .clickNextButton();
         secondOrderPageObject.fillOrderForm(
-                orderData.getDeliveryDate(),
-                orderData.getPeriod()
-        );
-        secondOrderPageObject.clickOrderButton();
-        secondOrderPageObject.clickConfirmOrderButton();
+                        orderData.getDeliveryDate(),
+                        orderData.getPeriod()
+                )
+                .clickOrderButton()
+                .clickConfirmOrderButton();
         Assert.assertTrue(
                 "Всплывающее окно с сообщением об успешном создании заказа не обнаружено",
                 secondOrderPageObject.isOrderModalHelperTextShown()
@@ -115,22 +99,22 @@ public class SuccessOrderTest {
 
     @Test
     public void successOrderFromMainPageButtonTest() {
-        mainPageObject.clickAcceptCookieButton();
-        mainPageObject.clickMainPageOrderButton();
+        mainPageObject.clickAcceptCookieButton()
+                .clickMainPageOrderButton();
         firstOrderPageObject.fillOrderForm(
-                userData.getName(),
-                userData.getSecondName(),
-                userData.getAddress(),
-                userData.getMetroStation(),
-                userData.getPhoneNumber()
-        );
-        firstOrderPageObject.clickNextButton();
+                        userData.getName(),
+                        userData.getSecondName(),
+                        userData.getAddress(),
+                        userData.getMetroStation(),
+                        userData.getPhoneNumber()
+                )
+                .clickNextButton();
         secondOrderPageObject.fillOrderForm(
-                orderData.getDeliveryDate(),
-                orderData.getPeriod()
-        );
-        secondOrderPageObject.clickOrderButton();
-        secondOrderPageObject.clickConfirmOrderButton();
+                        orderData.getDeliveryDate(),
+                        orderData.getPeriod()
+                )
+                .clickOrderButton()
+                .clickConfirmOrderButton();
         Assert.assertTrue(
                 "Всплывающее окно с сообщением об успешном создании заказа не обнаружено",
                 secondOrderPageObject.isOrderModalHelperTextShown()
@@ -139,10 +123,5 @@ public class SuccessOrderTest {
                 "Текст всплывающего окна с сообщением об успешном создании заказа не соответствует ожидаемому.",
                 secondOrderPageObject.getOrderModalHelperText().contains(EXPECTED_MODAL_HELPER_TEXT)
         );
-    }
-
-    @After
-    public void tearDown() {
-        webDriverManager.quit();
     }
 }

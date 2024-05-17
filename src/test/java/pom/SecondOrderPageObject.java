@@ -1,4 +1,4 @@
-package pageobject;
+package pom;
 
 import model.RentalPeriod;
 import org.openqa.selenium.By;
@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 public class SecondOrderPageObject {
 
-    private static final DateTimeFormatter RUSSIAN_DATE_FORMATTER =  DateTimeFormatter.ofPattern("d.MM.yyyy");
+    private static final DateTimeFormatter RUSSIAN_DATE_FORMATTER = DateTimeFormatter.ofPattern("d.MM.yyyy");
 
     private final WebDriver webDriver;
     //Поле ввода даты доставка
@@ -29,19 +29,20 @@ public class SecondOrderPageObject {
         this.webDriver = webDriver;
     }
 
-    public void fillOrderForm(LocalDate deliveryDate, RentalPeriod period) {
-        fillDeliveryDate(deliveryDate);
-        fillRentalPeriod(period);
+    public SecondOrderPageObject fillOrderForm(LocalDate deliveryDate, RentalPeriod period) {
+        return fillDeliveryDate(deliveryDate).
+                fillRentalPeriod(period);
     }
 
-    public void fillDeliveryDate(LocalDate deliveryDate) {
+    public SecondOrderPageObject fillDeliveryDate(LocalDate deliveryDate) {
         webDriver.findElement(this.deliveryDate).sendKeys(
                 RUSSIAN_DATE_FORMATTER.format(deliveryDate),
                 Keys.RETURN
         );
+        return this;
     }
 
-    public void fillRentalPeriod(RentalPeriod period) {
+    public SecondOrderPageObject fillRentalPeriod(RentalPeriod period) {
         webDriver.findElement(rentalPeriod).click();
         webDriver.findElement(
                         By.xpath(
@@ -49,14 +50,17 @@ public class SecondOrderPageObject {
                         )
                 )
                 .click();
+        return this;
     }
 
-    public void clickOrderButton() {
+    public SecondOrderPageObject clickOrderButton() {
         webDriver.findElement(completeOrder).click();
+        return this;
     }
 
-    public void clickConfirmOrderButton() {
+    public SecondOrderPageObject clickConfirmOrderButton() {
         webDriver.findElement(confirmOrderButton).click();
+        return this;
     }
 
     public boolean isOrderModalHelperTextShown() {
